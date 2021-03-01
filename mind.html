@@ -1,0 +1,1080 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>jsMind</title>
+    <link type="text/css" rel="stylesheet" href="./mind.css" />
+</head>
+
+<body>
+    <h2 class="titleHi tc">API 标签标注</h2>
+    <div id="layout">
+        <div id="jsmind_nav">
+            <div class="boxoPeration tc">
+                <button type="button" class="btn btn-primary btn-xs">标准rules集</button>
+            </div>
+            <div class="linesd"></div>
+            <div class="flex tc">
+                <div class="col-xs-6">
+                    <select name="fontStyle" class="form-select" id="ruleFather" onchange="selectRuleFather()">
+                    </select>
+                </div>
+                <div class="col-xs-6">
+                    <select name="fontWeight" class="form-select" id="ruleChind" onchange="selectRuleChina()">
+                    </select>
+                </div>
+            </div>
+            <div class="linesd"></div>
+            <div class="flex tc">
+                <div class="col-xs-6">
+                    <select name="fontStyle" class="form-select" id="histryPackage" onchange="selHistryPackage()">
+                    </select>
+                </div>
+                <div class="col-xs-6">
+                    <select name="fontWeight" class="form-select" id="histryClass" onchange="sliceHistryClass()">
+                    </select>
+                </div>
+            </div>
+            <div class="linesd"></div>
+            <div class="list-group clear" id="histrFns">
+                <div class="nodata">...暂无数据...</div>
+            </div>
+            <div class="linesd"></div>
+            <div class="boxoPeration tc">
+                <button type="button" class="btn">函数集</button>
+                <button type="button" class="btn" onclick="createFs()">函数集成</button>
+            </div>
+            <div class="linesd"></div>
+            <div class="flex tc">
+                <div class="col-xs-6">
+                    <select name="fontStyle" class="form-select" onchange="selectPackage()" id="ddlResourceType">
+                    </select>
+                </div>
+                <div class="col-xs-6">
+                    <select name="fontWeight" class="form-select" id="classbo" onchange="sliceClass()">
+                    </select>
+                </div>
+            </div>
+            <div class="linesd"></div>
+            <div class="list-group clear" id="fns">
+                <div class="nodata">...暂无数据...</div>
+            </div>
+            <div class="linesd"></div>
+            <!-- <div>1. Open</div>
+            <ol type='A'>
+                <li><button onclick="open_json();">open example</button></li>
+                <li><button onclick="open_ajax();">open remote</button></li>
+                <li><button onclick="prompt_info('see 6.Multi Format');">open local file</button></li>
+                <li><button onclick="prompt_info('see 6.Multi Format');">save local file</button></li>
+                <li><button onclick="screen_shot();">screenshot</button></li>
+            </ol>
+            </ol>
+            <div>2. Select &amp; Toggle</div>
+            <ol type='A'>
+                <li><button onclick="select_node();">select a node</button></li>
+                <li><button onclick="prompt_info('please try click a node');">try click a node</button></li>
+                <li><button onclick="show_selected();">get the selected</button></li>
+            </ol> -->
+            <div>3. Edit</div>
+            <ol type='A'>
+                <!-- <li><button onclick="toggle_editable(this);">disable editable</button></li>
+                <li><button onclick="add_node();">add a node</button></li>
+                <li><button onclick="add_image_node();">add a image node</button></li>
+                <li><button onclick="modify_node();">modify node</button></li>
+                <li><button onclick="prompt_info('please try double click a node');">try double click</button></li>
+                <li><button onclick="move_node();">move a node</button></li>
+                <li><button onclick="move_to_first();">move to first</button></li>
+                <li><button onclick="move_to_last();">move to last</button></li>
+                <li><button onclick="remove_node();">remove node</button></li> -->
+                <li><button onclick="saveJson();">save JSON Data</button></li>
+                <!-- <li><button id="zoom-in-button" style="width:50px" onclick="zoomIn();">+</button></li>
+                <li><button id="zoom-out-button" style="width:50px" onclick="zoomOut();">-</button></li> -->
+            </ol>
+            <!-- <div>4. Style</div>
+            <ol type='A'>
+                <li><button onclick="change_text_font();">change font</button></li>
+                <li><button onclick="change_text_color();">change color</button></li>
+                <li><button onclick="change_background_color();">change bg-color</button></li>
+                <li><button onclick="change_background_image();">change background</button></li>
+            </ol>
+            <div>5. Theme</div>
+            <ol type='A'>
+                <li>
+                    <select onchange="set_theme(this.value);">
+                        <option value="">default</option>
+                        <option value="primary">primary</option>
+                        <option value="warning">warning</option>
+                        <option value="danger">danger</option>
+                        <option value="success">success</option>
+                        <option value="info">info</option>
+                        <option value="greensea" selected="selected">greensea</option>
+                        <option value="nephrite">nephrite</option>
+                        <option value="belizehole">belizehole</option>
+                        <option value="wisteria">wisteria</option>
+                        <option value="asphalt">asphalt</option>
+                        <option value="orange">orange</option>
+                        <option value="pumpkin">pumpkin</option>
+                        <option value="pomegranate">pomegranate</option>
+                        <option value="clouds">clouds</option>
+                        <option value="asbestos">asbestos</option>
+                    </select>
+                </li>
+            </ol>
+            <div>6. Adjusting</div>
+            <ol type='A'>
+                <li><button onclick="change_container();">resize container</button>
+                    <button onclick="resize_jsmind();">adusting</button>
+                </li>
+                <li>expand/collapse</li>
+                <ol>
+                    <li><button class="sub" onclick="expand();">expand node</button></li>
+                    <li><button class="sub" onclick="collapse();">collapse node</button></li>
+                    <li><button class="sub" onclick="toggle();">toggle node</button></li>
+                    <li><button class="sub" onclick="expand_to_level2();">expand to level 2</button></li>
+                    <li><button class="sub" onclick="expand_to_level3();">expand to level 3</button></li>
+                    <li><button class="sub" onclick="expand_all();">expand all</button></li>
+                    <li><button class="sub" onclick="collapse_all();">collapse all</button></li>
+                </ol>
+                <li>zoom</li>
+
+                <button id="zoom-in-button" style="width:50px" onclick="zoomIn();">
+                    In
+                </button>
+                <button id="zoom-out-button" style="width:50px" onclick="zoomOut();">
+                    Out
+                </button>
+            </ol> -->
+
+            <!-- <div>7. Multi Format</div>
+            <ol type='A'>
+                <li>node_tree(default)</li>
+                <ol>
+                    <li><button class="sub" onclick="show_data();">show data</button></li>
+                    <li><button class="sub" onclick="save_file();">save file</button></li>
+                    <li><input id="file_input" class="file_input" type="file" /></li>
+                    <li><button class="sub" onclick="open_file();">open file</button></li>
+                </ol>
+                <li>node_array</li>
+                <ol>
+                    <li><button class="sub" onclick="get_nodearray_data();">show data</button></li>
+                    <li><button class="sub" onclick="save_nodearray_file();">save file</button></li>
+                    <li><input id="file_input_nodearray" class="file_input" type="file" /></li>
+                    <li><button class="sub" onclick="open_nodearray();">open file</button></li>
+                </ol>
+                <li>freemind(.mm)</li>
+                <ol>
+                    <li><button class="sub" onclick="get_freemind_data();">show data</button></li>
+                    <li><button class="sub" onclick="save_freemind_file();">save file</button></li>
+                    <li><input id="file_input_freemind" class="file_input" type="file" /></li>
+                    <li><button class="sub" onclick="open_freemind();">open file</button></li>
+                </ol>
+            </ol> -->
+        </div>
+        <div id="jsmind_container">
+        </div>
+        <div style="display:none">
+            <input class="file" type="file" id="image-chooser" accept="image/*" />
+        </div>
+        <div id="box-node">
+        </div>
+        <button id="zoom-in-button" style="width:50px" onclick="zoomIn();">+</button><button id="zoom-out-button" style="width:50px" onclick="zoomOut();">-</button>     
+    </div>
+    <script src="./tools/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="./tools/jsmind.js"></script>
+    <script type="text/javascript" src="./tools/jsmind.draggable.js"></script>
+    <script type="text/javascript" src="./tools/jsmind.screenshot.js"></script>
+    <script type="text/javascript" src="./tools/globaldata.js"></script>
+    <script type="text/javascript">
+        let _jm = null;
+        let isEdit = ''
+        let allFnList = [] //所有数据集
+        let packageArr = [] //包名
+        let histryArr = [] //历史数据
+        //引进vsode 接收 传输数据 Api
+        const vscode = acquireVsCodeApi();
+        // 接收生成的数据
+        window.addEventListener('message', event => {
+            const message = event.data;
+            switch (message.type) {
+                case 'fnList':
+                    packageGet(message)
+                    break;
+                case 'hisFnList':
+                    pageHistry(message)
+                    break;
+                case 'fsmData':
+                    getShowFsm(message)
+                    break;
+                case 'newtest':
+                    rulesGet()
+                    break;
+                default:
+                    break;
+            }
+        })
+        //读取标准rules
+        rulesGet()
+        //...................................................................//
+        // 获取标准规则集
+        function rulesGet() {
+            let str = ''
+            let objArr = [...Object.keys(rulesList)]
+            objArr.forEach(item => {
+                str += `<option value="${item}">${item}</option>`
+            })
+            // str += `<option value="">请选择包</option>`
+            $("#ruleFather").html(str)
+            $('#ruleFather').val(objArr[0])
+            setRuleChind(objArr[0])
+        }
+        //标准规则父集
+        function selectRuleFather(val) {
+            let key = $('#ruleFather').val()
+            setRuleChind(key)
+        }
+        function selectRuleChina() {
+            let ruleName = $("#ruleChind").val()
+            vscode.postMessage({ command: 'changeRule', text: ruleName });
+        }
+        //标准规则子集
+        function setRuleChind(val) {
+            $("#ruleChind").html("")
+            let arr = rulesList[val]
+            let str = ''
+            arr.forEach(item => {
+                str += `<option value="${item}">${item}</option>`
+            })
+            $("#ruleChind").html(str)
+            $('#ruleChind').val(arr[0])
+            selectRuleChina()
+        }
+        //点击生成数据
+        function createFs() {
+            vscode.postMessage({ command: 'createFs', text: 'create' });
+        }
+        /**
+          * 
+          * **/
+        function pageHistry(message) {
+            $('#histryPackage').val('')
+            histryArr = [...message.text]
+          //  vscode.postMessage({ command: 'test', text:histryArr });
+            if (!histryArr.length) {
+                $("#histryPackage").html('')
+                $("#histryClass").html('')
+                $("#histrFns").html('<div class="nodata">...暂无数据...</div>')
+                return
+            }
+            let hisPackageArr = []
+            histryArr.forEach(item => {
+                let strarr = item.split(":")
+                let str1 = strarr[0]
+                let strArr1 = str1.split(".")
+                let str2 = strArr1.slice(0, strArr1.length - 1)
+                let ss = str2.join(".")
+                if (!hisPackageArr.includes(ss) && str1.includes(ss)) {
+                    hisPackageArr.push(ss)
+                }
+            })
+            let str = ''
+            for (let i = 0; i < hisPackageArr.length; i++) { //循环添加多个值
+                str += `<option value="${hisPackageArr[i]}">${hisPackageArr[i]}</option>`
+            }
+            str += `<option value="">请选择包</option>`
+            $("#histryPackage").html(str)
+            $('#histryPackage').val('')
+            selHistryPackage()
+        }
+        function selHistryPackage() {
+            let pacKName = $('#histryPackage').val()
+            let clabox = []
+            histryArr.forEach(item => {
+                let strarr = item.split(":")
+                let str1 = strarr[0]
+                let strArr1 = str1.split(".")
+                let str2 = strArr1.slice(strArr1.length - 1)
+                let ss = str2.join(".")
+                let starStr = strArr1.slice(0, strArr1.length - 1).join('.')
+                if (!clabox.includes(ss) && starStr == pacKName) {
+                    clabox.push(ss)
+                }
+            })
+            let str = ''
+            for (let i = 0; i < clabox.length; i++) { //循环添加多个值
+                str += `<option value="${clabox[i]}">${clabox[i]}</option>`
+            }
+            str += `<option value="">请选类</option>`
+            $("#histryClass").html(str)
+            $("#histryClass").val('')
+            $("#histrFns").html('')
+            
+            let fnTxt = ''
+            let strpc = `${pacKName}`
+            htmlHisFns(strpc)
+        }
+        //选择类名
+        function sliceHistryClass() {
+            let clasName = $("#histryClass").val()
+            let pacKName = $('#histryPackage').val()
+            let strpc = ''
+            if (clasName && clasName != '') {
+                strpc = `${pacKName}.${clasName}`
+            } else {
+                strpc = `${pacKName}`
+            }
+            htmlHisFns(strpc)
+        }
+        function htmlHisFns(strpc) {
+            $("#histrFns").html('')
+            let fnTxt = ''
+            let classbo = $("#histryClass").val()
+            let arrNh = []
+            histryArr.forEach((item, index) => {
+                if (item.includes(strpc)) {
+                    item = item.replace(/</g, "&lt;");
+                    item = item.replace(/>/g, "&gt;");
+                    let id = `node-${index}`;
+                    let strArr = item.split(":")
+                    let newStrArr = strArr[0].split(".")
+                    if (classbo && classbo != '') {
+                        if (strArr[0] == strpc) {
+                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div></div>`
+                        }
+                    } else {
+                        arrNh = newStrArr.slice(0, newStrArr.length - 1)
+                        if (arrNh.join(".") == strpc) {
+                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div></div>`
+                        }
+                    }
+
+                }
+            })
+            if(fnTxt &&fnTxt !=''){
+              $("#histrFns").html(fnTxt)
+            }else {
+                $("#histrFns").html('<div class="nodata">...暂无数据...</div>')
+            }
+           
+        }
+
+        /**
+         * 
+         * 
+         * **/
+        //获取包名
+        function packageGet(message) {
+            allFnList = [...new Set(message.text)];
+            if (!allFnList.length) {
+                return
+            }
+            allFnList.forEach(item => {
+                let txt = fiters(item)
+                if (txt && txt != '' && txt != "") {
+                    txt = txt.replace(/</g, "&lt;");
+                    txt = txt.replace(/>/g, "&gt;");
+                    let strarr = txt.split(":")
+                    let str1 = strarr[0]
+                    let strArr1 = str1.split(".")
+                    let str2 = strArr1.slice(0, strArr1.length - 1)
+                    let ss = str2.join(".")
+                    if (!packageArr.includes(ss) && str1.includes(ss)) {
+                        packageArr.push(ss)
+                    }
+                }
+            })
+            let str = ''
+            for (let i = 0; i < packageArr.length; i++) { //循环添加多个值
+                str += `<option value="${packageArr[i]}">${packageArr[i]}</option>`
+            }
+            str += `<option value="">请选择包</option>`
+            $("#ddlResourceType").html(str)
+            $('#ddlResourceType').val('')
+        }
+        //选择包名
+        function selectPackage() {
+            let pacKName = $('#ddlResourceType').val()
+            let clabox = []
+            allFnList.forEach(item => {
+                let txt = fiters(item)
+                if (txt && txt != '' && txt != "" && txt.includes(pacKName)) {
+                    txt = txt.replace(/</g, "&lt;");
+                    txt = txt.replace(/>/g, "&gt;");
+                    let strarr = txt.split(":")
+                    let str1 = strarr[0]
+                    let strArr1 = str1.split(".")
+                    let str2 = strArr1.slice(strArr1.length - 1)
+                    let ss = str2.join(".")
+                    let starStr = strArr1.slice(0, strArr1.length - 1).join('.')
+                    if (!clabox.includes(ss) && starStr == pacKName) {
+                        clabox.push(ss)
+                    }
+                }
+            })
+            let str = ''
+            for (let i = 0; i < clabox.length; i++) { //循环添加多个值
+                str += `<option value="${clabox[i]}">${clabox[i]}</option>`
+            }
+            str += `<option value="">请选类</option>`
+            $("#classbo").html(str)
+            $("#classbo").val('')
+            $("#fns").html('')
+            let fnTxt = ''
+            let strpc = `${pacKName}`
+            htmlFns(strpc)
+        }
+        //选择类名
+        function sliceClass() {
+            let clasName = $("#classbo").val()
+            let pacKName = $('#ddlResourceType').val()
+            let strpc = ''
+            if (clasName && clasName != '') {
+                strpc = `${pacKName}.${clasName}`
+            } else {
+                strpc = `${pacKName}`
+            }
+            htmlFns(strpc)
+        }
+        //生成函数list html
+        function htmlFns(strpc) {
+            $("#fns").html('')
+            let fnTxt = ''
+            let classbo = $("#classbo").val()
+            let arrNh = []
+            allFnList.forEach((item, index) => {
+                let txt = fiters(item)
+                if (txt && txt != '' && txt != "" && txt.includes(strpc)) {
+                    txt = txt.replace(/</g, "&lt;");
+                    txt = txt.replace(/>/g, "&gt;");
+                    let id = `node${index}`;
+                    let strArr = txt.split(":")
+                    let newStrArr = strArr[0].split(".")
+                    if (classbo && classbo != '') {
+                        if (strArr[0] == strpc) {
+                            fnTxt += `<div class="noList"  text="${txt}" id="${id}"><div class="cpNode">${txt}</div></div>`
+                        }
+                    } else {
+                        arrNh = newStrArr.slice(0, newStrArr.length - 1)
+                        if (arrNh.join(".") == strpc) {
+                            fnTxt += `<div class="noList"  text="${txt}" id="${id}"><div class="cpNode">${txt}</div></div>`
+                        }
+                    }
+
+                }
+            })
+            $("#fns").html(fnTxt)
+        }
+        //数据过滤
+        function fiters(str) {
+            let newstr = ""
+            if (str && str != '') {
+                let arrstr = str.split("|")
+                let claFn = arrstr[0]
+                newstr = claFn.slice(1, claFn.length - 1)
+            }
+            return newstr
+        }
+        /**
+       * 
+       * 
+       * 
+       * 
+       * 
+       * 
+       * **/
+        //切换函数同时切换画布
+        $("#fns").on("click", ".noList", function () {
+            let fnt = $(this).attr('text')
+            $(".noList").removeClass("seled")
+            $(".hisList").removeClass("seled")
+            $(this).addClass("seled")
+            $("#jsmind_container").html('')
+            vscode.postMessage({ command: 'getFSM', text: fnt });
+        });
+        //切换函数同时切换历史画布
+        $("#histrFns").on("click", ".hisList", function () {
+            let key = $(this).attr('text')
+            $(".hisList").removeClass("seled")
+            $(".noList").removeClass("seled")
+            $(this).addClass("seled")
+            $("#jsmind_container").html('')
+            vscode.postMessage({ command: 'getFSM', text: key });
+        });
+        function getShowFsm(message) {
+            open_empty()
+            let arr = Object.keys(message.text)
+            let txt = message.keys.replace(/</g, "&lt;");
+            txt = txt.replace(/>/g, "&gt;");
+            if (arr.length) {
+                _jm.show(message.text);
+                _jm.update_node('root', txt);
+            } else {
+                _jm.update_node('root', txt);
+            }
+
+        }
+        //点击右边选择弹窗事件
+        $("#box-node").on("click", '.setTag', function () {
+            let currentKey = $(this).attr("tagType") //选中的key
+            let selected_id = get_selected_nodeid(); //节点id
+            let arr = []
+            if (selected_id && selected_id == 'root') {
+                arr = mainFn[currentKey]
+            } else if (selected_id && selected_id != 'root') {
+                arr = apiObj[currentKey]
+            }
+            // open_json()
+            let nodeId = document.getElementsByClassName('selected')[0].getAttribute('nodeid');
+            let mind_data = _jm.get_data();
+            if (nodeId == 'root') {
+                let obj = {
+                    direction: 'right',
+                    expanded: true,
+                    id: jsMind.util.uuid.newid(),
+                    topic: currentKey,
+                }
+                let children = []
+                arr.forEach(item => {
+                    children.push({ expanded: true, id: item + jsMind.util.uuid.newid(), topic: item })
+                })
+                if (children.length) {
+                    obj.children = children
+                }
+                if (mind_data.data && mind_data.data.children) {
+                    mind_data.data.children.push(obj)
+                } else if (mind_data.data) {
+                    mind_data.data.children = [obj]
+                }
+                _jm.show(mind_data);
+
+            } else {
+                let selected_id = get_selected_nodeid();
+                let xt = $(`[nodeid=${selected_id}]`).text().replace('-', '')
+                if (xt.includes('stringTag') || xt.includes('stringTagAttr') || xt.includes("string") || strObj['stringTag'].includes(xt) || strObj['stringTagAttr'].includes(xt) || Object.values(rulesList).flat().includes(xt)) {
+                    _jm.update_node(nodeId, currentKey);
+                } else if (xt.includes("obj") || Object.keys(objAttr).includes(xt)) {
+                    let objVal = objAttr[currentKey]
+                    if (Array.isArray(objVal)) {
+                        if (xt == currentKey) {
+                        } else {
+                            getIdJson(mind_data.data, selected_id)
+                            add_node('N')
+                            _jm.update_node(nodeId, currentKey);
+
+                        }
+                    } else {
+                        getIdJson(mind_data.data, selected_id)
+                        _jm.update_node(nodeId, currentKey);
+                    }
+                } else if (xt.includes('value') || Object.keys(apiObj).includes(currentKey)) {
+                    if (xt == currentKey) {
+
+                    } else {
+                        getIdJson(mind_data.data, selected_id)
+                        arr.forEach(item => {
+                            add_node(item)
+                        })
+                        _jm.update_node(nodeId, currentKey);
+                    }
+                } else {
+                    arr.forEach(item => {
+                        add_node(item)
+                    })
+                    _jm.update_node(nodeId, currentKey);
+                }
+            }
+        })
+        //通过id获取对应节点数据删除子集
+        function getIdJson(data, id) {
+            let json = [];
+            let jsonData = []
+            jsonData.push(data)
+            getSubJson(jsonData, id, json)
+            if (json.length) {
+                json.forEach(item => {
+                    if (item.hasOwnProperty("children") && item.children.length) {
+                        item.children.forEach(it => {
+                            _jm.remove_node(it.id);
+                        })
+                    }
+                })
+            }
+        }
+        //通过id获取对应节点数据
+        function getSubJson(jsonData, destID, json) {
+            for (var i = 0; i < jsonData.length; i++) {
+                if (jsonData[i].id == destID) {
+                    json.push(jsonData[i]);
+                } else {
+                    if (jsonData[i].hasOwnProperty("children")) {
+                        getSubJson(jsonData[i].children, destID, json);
+                    }
+                }
+            }
+        }
+        //生成列表api
+        function createApI(xt) {
+            let str = ''
+            let objArr = []
+            let selected_id = get_selected_nodeid();
+            if (selected_id && selected_id == 'root') {
+                objArr = [...Object.keys(mainFn)]
+            } else if (selected_id && selected_id != 'root') {
+                if (selected_id.includes('input')) {
+                } else if (xt == 'stringTag' || strObj['stringTag'].includes(xt)) {
+                    objArr = [...strObj['stringTag']]
+                } else if (xt == 'stringTagAttr' || strObj['stringTagAttr'].includes(xt)) {
+                    objArr = [...strObj['stringTagAttr']]
+                } else if (xt == 'string' || Object.values(rulesList).flat().includes(xt)) {
+                    objArr = Object.values(rulesList).flat()
+                } else if (xt == 'obj' || Object.keys(objAttr).includes(xt)) {
+                    objArr = [...Object.keys(objAttr)]
+                } else if (xt == 'value' || Object.keys(apiObj).includes(xt)) {
+                    objArr = [...Object.keys(apiObj)]
+                }
+            }
+            objArr.forEach(item => {
+                str += `<div class="setTag" tagType="${item}">${item}</div>`
+            })
+
+            $("#box-node").html(str)
+        }
+        //保存到JSON文件
+        function saveJson() {
+            let mind_data = _jm.get_data();
+            let arr = Object.values(rulesList).flat()
+            vscode.postMessage({ command: 'saveJson', text: mind_data, ruleArr: arr });
+        }
+
+        // ----------------               ------------                                            ---------------------//
+        function open_empty() {
+            var options = {
+                container: 'jsmind_container',
+                theme: 'greensea',
+                editable: true
+            }
+            _jm = jsMind.show(options);
+        }
+        function open_json() {
+            var mind = {
+                "meta": {
+                    "name": "jsMind remote",
+                    "author": "hizzgdev@163.com",
+                    "version": "0.2"
+                },
+                "format": "node_tree",
+                "data": {
+                    "id": "root", "topic": "jsMind", "children": [
+                        {
+                            "id": "easy", "topic": "Easy", "direction": "left", "children": [
+                                { "id": "easy1", "topic": "Easy to show" },
+                                { "id": "easy2", "topic": "Easy to edit" },
+                                { "id": "easy3", "topic": "Easy to store" },
+                                { "id": "easy4", "topic": "Easy to embed" },
+                                { "id": "other3", "background-image": "ant.png", "width": "100", "height": "100" }
+                            ]
+                        },
+                        {
+                            "id": "open", "topic": "Open Source", "direction": "right", "children": [
+                                { "id": "open1", "topic": "on GitHub", "background-color": "#eee", "foreground-color": "blue" },
+                                { "id": "open2", "topic": "BSD License" }
+                            ]
+                        },
+                        {
+                            "id": "powerful", "topic": "Powerful", "direction": "right", "children": [
+                                { "id": "powerful1", "topic": "Base on Javascript" },
+                                { "id": "powerful2", "topic": "Base on HTML5" },
+                                { "id": "powerful3", "topic": "Depends on you" }
+                            ]
+                        },
+                        {
+                            "id": "other", "topic": "test node", "direction": "left", "children": [
+                                { "id": "other1", "topic": "I'm from local variable" },
+                                { "id": "other2", "topic": "I can do everything" }
+                            ]
+                        }
+                    ]
+                }
+            }
+            _jm.show(mind);
+        }
+
+        function open_ajax() {
+            var mind_url = 'data_example.json';
+            jsMind.util.ajax.get(mind_url, function (mind) {
+                _jm.show(mind);
+            });
+        }
+
+        function screen_shot() {
+            _jm.screenshot.shootDownload();
+        }
+
+        function show_data() {
+            var mind_data = _jm.get_data();
+            var mind_string = jsMind.util.json.json2string(mind_data);
+            prompt_info(mind_string);
+        }
+
+        function save_file() {
+            var mind_data = _jm.get_data();
+            var mind_name = mind_data.meta.name;
+            var mind_str = jsMind.util.json.json2string(mind_data);
+            jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.jm');
+        }
+
+        function open_file() {
+            var file_input = document.getElementById('file_input');
+            var files = file_input.files;
+            if (files.length > 0) {
+                var file_data = files[0];
+                jsMind.util.file.read(file_data, function (jsmind_data, jsmind_name) {
+                    var mind = jsMind.util.json.string2json(jsmind_data);
+                    if (!!mind) {
+                        _jm.show(mind);
+                    } else {
+                        prompt_info('can not open this file as mindmap');
+                    }
+                });
+            } else {
+                prompt_info('please choose a file first')
+            }
+        }
+
+        function select_node() {
+            var nodeid = 'other';
+            _jm.select_node(nodeid);
+        }
+
+        function show_selected() {
+            var selected_node = _jm.get_selected_node();
+            if (!!selected_node) {
+                prompt_info(selected_node.topic);
+            } else {
+                prompt_info('nothing');
+            }
+        }
+
+        function get_selected_nodeid() {
+            var selected_node = _jm.get_selected_node();
+            if (!!selected_node) {
+                return selected_node.id;
+            } else {
+                return null;
+            }
+        }
+
+        function add_node(topic) {
+            var selected_node = _jm.get_selected_node(); // as parent of new node
+            if (!selected_node) { prompt_info('please select a node first.'); return; }
+
+            var nodeid = topic + jsMind.util.uuid.newid();
+            var topic = topic;
+            var node = _jm.add_node(selected_node, nodeid, topic);
+        }
+
+        var imageChooser = document.getElementById('image-chooser');
+        imageChooser.addEventListener('change', function (event) {
+            // Read file here.
+            var reader = new FileReader();
+            reader.onloadend = (function () {
+                var selected_node = _jm.get_selected_node();
+                var nodeid = jsMind.util.uuid.newid();
+                var topic = undefined;
+                var data = {
+                    "background-image": reader.result,
+                    "width": "100",
+                    "height": "100"
+                };
+                var node = _jm.add_node(selected_node, nodeid, topic, data);
+                //var node = _jm.add_image_node(selected_node, nodeid, reader.result, 100, 100);
+                //add_image_node:function(parent_node, nodeid, image, width, height, data, idx, direction, expanded){
+            });
+
+            var file = imageChooser.files[0];
+            if (file) {
+                reader.readAsDataURL(file);
+            };
+
+        }, false);
+
+        function add_image_node() {
+            var selected_node = _jm.get_selected_node(); // as parent of new node
+            if (!selected_node) {
+                prompt_info('please select a node first.');
+                return;
+            }
+
+            imageChooser.focus();
+            imageChooser.click();
+        }
+
+        function modify_node() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            // modify the topic
+            _jm.update_node(selected_id, '--- modified ---');
+        }
+
+        function move_to_first() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.move_node(selected_id, '_first_');
+        }
+
+        function move_to_last() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.move_node(selected_id, '_last_');
+        }
+
+        function move_node() {
+            // move a node before another
+            _jm.move_node('other', 'open');
+        }
+
+        function remove_node() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.remove_node(selected_id);
+        }
+
+        function change_text_font() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.set_node_font_style(selected_id, 28);
+        }
+
+        function change_text_color() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.set_node_color(selected_id, null, '#000');
+        }
+
+        function change_background_color() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.set_node_color(selected_id, '#eee', null);
+        }
+
+        function change_background_image() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.set_node_background_image(selected_id, 'ant.png', 100, 100);
+        }
+
+        function set_theme(theme_name) {
+            _jm.set_theme(theme_name);
+        }
+
+        var zoomInButton = document.getElementById("zoom-in-button");
+        var zoomOutButton = document.getElementById("zoom-out-button");
+
+        function zoomIn() {
+            if (_jm.view.zoomIn()) {
+                zoomOutButton.disabled = false;
+            } else {
+                zoomInButton.disabled = true;
+            };
+        };
+
+        function zoomOut() {
+            if (_jm.view.zoomOut()) {
+                zoomInButton.disabled = false;
+            } else {
+                zoomOutButton.disabled = true;
+            };
+        };
+
+        function toggle_editable(btn) {
+            var editable = _jm.get_editable();
+            if (editable) {
+                _jm.disable_edit();
+                btn.innerHTML = 'enable editable';
+            } else {
+                _jm.enable_edit();
+                btn.innerHTML = 'disable editable';
+            }
+        }
+
+        // this method change size of container, perpare for adjusting jsmind
+        function change_container() {
+            var c = document.getElementById('jsmind_container');
+            // c.style.width = '800px';
+            // c.style.height = '500px';
+        }
+
+        function resize_jsmind() {
+            _jm.resize();
+        }
+
+        function expand() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.expand_node(selected_id);
+        }
+
+        function collapse() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.collapse_node(selected_id);
+        }
+
+        function toggle() {
+            var selected_id = get_selected_nodeid();
+            if (!selected_id) { prompt_info('please select a node first.'); return; }
+
+            _jm.toggle_node(selected_id);
+        }
+
+        function expand_all() {
+            _jm.expand_all();
+        }
+
+        function expand_to_level2() {
+            _jm.expand_to_depth(2);
+        }
+
+        function expand_to_level3() {
+            _jm.expand_to_depth(3);
+        }
+
+        function collapse_all() {
+            _jm.collapse_all();
+        }
+
+
+        function get_nodearray_data() {
+            var mind_data = _jm.get_data('node_array');
+            var mind_string = jsMind.util.json.json2string(mind_data);
+            prompt_info(mind_string);
+        }
+
+        function save_nodearray_file() {
+            var mind_data = _jm.get_data('node_array');
+            var mind_name = mind_data.meta.name;
+            var mind_str = jsMind.util.json.json2string(mind_data);
+            jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.jm');
+        }
+
+        function open_nodearray() {
+            var file_input = document.getElementById('file_input_nodearray');
+            var files = file_input.files;
+            if (files.length > 0) {
+                var file_data = files[0];
+                jsMind.util.file.read(file_data, function (jsmind_data, jsmind_name) {
+                    var mind = jsMind.util.json.string2json(jsmind_data);
+                    if (!!mind) {
+                        _jm.show(mind);
+                    } else {
+                        prompt_info('can not open this file as mindmap');
+                    }
+                });
+            } else {
+                prompt_info('please choose a file first')
+            }
+        }
+
+        function get_freemind_data() {
+            var mind_data = _jm.get_data('freemind');
+            var mind_string = jsMind.util.json.json2string(mind_data);
+            alert(mind_string);
+        }
+
+        function save_freemind_file() {
+            var mind_data = _jm.get_data('freemind');
+            var mind_name = mind_data.meta.name || 'freemind';
+            var mind_str = mind_data.data;
+            jsMind.util.file.save(mind_str, 'text/xml', mind_name + '.mm');
+        }
+
+        function open_freemind() {
+            var file_input = document.getElementById('file_input_freemind');
+            var files = file_input.files;
+            if (files.length > 0) {
+                var file_data = files[0];
+                jsMind.util.file.read(file_data, function (freemind_data, freemind_name) {
+                    if (freemind_data) {
+                        var mind_name = freemind_name;
+                        if (/.*\.mm$/.test(mind_name)) {
+                            mind_name = freemind_name.substring(0, freemind_name.length - 3);
+                        }
+                        var mind = {
+                            "meta": {
+                                "name": mind_name,
+                                "author": "hizzgdev@163.com",
+                                "version": "1.0.1"
+                            },
+                            "format": "freemind",
+                            "data": freemind_data
+                        };
+                        _jm.show(mind);
+                    } else {
+                        prompt_info('can not open this file as mindmap');
+                    }
+                });
+            } else {
+                prompt_info('please choose a file first')
+            }
+        }
+
+        function prompt_info(msg) {
+            alert(msg);
+        }
+        document.oncontextmenu = function () { return false };     //禁止鼠标右键菜单显示
+        var res = document.getElementById('box-node');      //找到id为box的div
+        document.body.onmouseup = function (e) {   //在body里点击触发事件
+            if (e.button === 2) {
+                //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
+                res.style.display = 'none';
+                // let selected_node = _jm.get_selected_node(); 
+                let selected_id = get_selected_nodeid();
+                let xt = $(`[nodeid=${selected_id}]`).text().replace('-', '')
+                //  vscode.postMessage({ command: 'test', text: xt });
+                //判断是否入口函数
+                let lean = mainFn.hasOwnProperty(xt)
+                if (lean) {
+                } else if (selected_id && !selected_id.includes('input')) {
+                    res.style.display = 'block'; //显示div盒子
+                    // vscode.postMessage({ command: 'test', text: xt});
+                    createApI(xt)
+                }
+            } else {
+                res.style.display = 'none';         //否则不显示div盒子
+            }
+
+        }
+        function findPosY(obj) {  //obj为所要计算的元素,可用id或class获取
+            var top = 0
+            if (obj.offsetParent) {
+                do {
+                    top += obj.offsetTop
+                } while (obj = obj.offsetParent)
+                return [top]
+            }
+        }
+        function findPosX(obj) {  //obj为所要计算的元素,可用id或class获取
+            var left = 0
+            if (obj.offsetParent) {
+                do {
+                    left += obj.offsetLeft
+                } while (obj = obj.offsetParent)
+                return [left]
+            }
+        }
+        //open_empty();
+    </script>
+</body>
+
+</html>
