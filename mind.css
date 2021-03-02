@@ -396,3 +396,17 @@ button.sub {
     z-index: 10000;
     top:0;
 }
+.hisList {
+    position: relative;
+}
+.del {
+    position: absolute;
+    color: #fff;
+    padding: 0 5px;
+    background-color: red;
+    border-radius: 4px;
+    z-index: 1000;
+    font-size: 12px;
+    right: 0;
+    top: 30%;
+}

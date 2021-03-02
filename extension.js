@@ -83,6 +83,9 @@ function activate(context) {
 				let testrr = message
 
 					break;
+			    case "delApi":
+					delApi(message,panel)
+					break;
 				case "changeRule":
 					changeRule(message,panel)
 					break;
@@ -147,6 +150,7 @@ function changeRule(ruleName,panel){
 	}
 	
 }
+//获取fsm 数据
 function getFSM(message,panel){
 	let strarr = message.text.split(":")
 	let str1 = strarr[0]
@@ -171,6 +175,7 @@ function getFSM(message,panel){
 		 panel.webview.postMessage({text:obj,type:'fsmData',keys:message.text});
 	  }
 }
+//保存数据
 function saveJsonData(params,panel) {
 	let obj = {}	
 	let fsmJson=params.text
@@ -223,8 +228,7 @@ function saveJsonData(params,panel) {
 						}
 					}
 				} 
-				 let ruleArr =newData['IDS00-J']
-				panel.webview.postMessage({text:ruleArr,type:'newtest'});
+				panel.webview.postMessage({text:newData,type:'refreshHis'});
 				fs.writeFile(rulerUrl,JSON.stringify(newData,"","\t"),'utf-8',(err,data)=>{
 					if (err) {
 						// res.status(500).send('Server is error...')
@@ -235,9 +239,7 @@ function saveJsonData(params,panel) {
 					obj[item] = []
 					obj[item].push(fsmJson.data.topic)
 				})
-				let ruleArr =obj['IDS00-J']
-
-				panel.webview.postMessage({text:ruleArr,type:'newtest'});
+				panel.webview.postMessage({text: obj,type:'refreshHis'});
 	            fs.writeFile(rulerUrl,JSON.stringify(obj,"","\t"),'utf-8',(err,data)=>{
 		        	if (err) {
 		        		// res.status(500).send('Server is error...')
@@ -316,6 +318,50 @@ function fnList(panel){
 	 }
    } 
 } 
+//删除操作
+function delApi(message,panel) {
+	let strarr = message.text.split(":")
+	let str1 = strarr[0]
+	let strArr1 = str1.split(".")
+	let str2 = strArr1.slice(strArr1.length - 1)
+	let ss = str2.join(".")
+	let starStr = strArr1.slice(0, strArr1.length - 1).join('.')
+	let fsU = strarr[1].replace(/</g, "");
+	fsU = fsU.replace(/>/g, "");
+	let saveUrl = `${fileUrl}/package/${starStr}/${ss}/${fsU}.json`
+	deleteFolderRecursive(saveUrl)
+	ruleRecode(message.text,panel)
+}
+//删除文件方法
+function deleteFolderRecursive (url) {
+    fs.unlink(url, function(err){
+		if(err){
+		 throw err;
+		}
+		console.log('文件:'+url+'删除成功！');
+	})
+}
+//清除标记目录
+function ruleRecode(isKey,panel){
+	let rulerUrl = `${fileUrl}/rule.json`
+	let checkFile = fs.existsSync(rulerUrl);
+	let arr =[]
+	if(checkFile){
+		fs.readFile(rulerUrl,'utf-8',(err,data)=>{
+			let newData = JSON.parse(data)
+			for(var key in newData) {
+				if(Array.isArray(newData[key]) && newData[key].includes(isKey)){
+			    	newData[key].splice(newData[key].findIndex(item => item=== isKey), 1)
+				}
+			} 
+			panel.webview.postMessage({text: newData,type:'refreshHis'});
+			fs.writeFile(rulerUrl,JSON.stringify(newData,"","\t"),'utf-8',(err,data)=>{
+				if (err) {
+				}
+			})	
+		 })
+	}
+}
 module.exports = {
 	activate,
 	deactivate

@@ -210,6 +210,11 @@
                 case 'newtest':
                     rulesGet()
                     break;
+                case 'refreshHis':
+                let ruleName = $("#ruleChind").val()
+                histryArr = [...message.text[ruleName]]
+                sliceHistryClass()
+                    break;
                 default:
                     break;
             }
@@ -340,12 +345,12 @@
                     let newStrArr = strArr[0].split(".")
                     if (classbo && classbo != '') {
                         if (strArr[0] == strpc) {
-                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div></div>`
+                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div><span text="${item}" class='del'>删除</span></div>`
                         }
                     } else {
                         arrNh = newStrArr.slice(0, newStrArr.length - 1)
                         if (arrNh.join(".") == strpc) {
-                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div></div>`
+                            fnTxt += `<div class="hisList"  text="${item}" id="${id}"><div class="cpNode">${item}</div><span text="${item}" class='del'>删除</span></div>`
                         }
                     }
 
@@ -501,6 +506,20 @@
             $("#jsmind_container").html('')
             vscode.postMessage({ command: 'getFSM', text: key });
         });
+        //删除标记的api
+        //切换函数同时切换历史画布
+          $("#histrFns").on("click", ".del", function (event) {
+            event.stopPropagation()
+            let key = $(this).attr('text')
+            let seled= $('.seled').attr('text')
+            if(key == seled){
+              $("#jsmind_container").html('')
+              $('.seled').removeClass("seled")
+            }
+             
+             vscode.postMessage({ command: 'delApi', text: key});
+        });
+
         function getShowFsm(message) {
             open_empty()
             let arr = Object.keys(message.text)

@@ -23,7 +23,7 @@ let apiObj = {
     'Func_may_enter_recursion':['obj'],
     'Func_may_not_return':['obj'],
     'Func_is_asynchronous_safe':['obj'],
-    'Func_performs_sanitize':['void'],
+    'Func_performs_sanitize':[],
     'Is_automatic_variable':['obj'],
     'Is_dynamically_allocated_if_copied':['obj'],
     'Is_compatible_parm_type':['obj'],
@@ -35,6 +35,11 @@ let apiObj = {
     'Get_mem_size':['obj'],
     'Get_value':['obj'],
     'Get_elem_count':['obj']
+    // '<':['value','value'],
+    // '>':['value','value'],
+    // '>=':['value','value'],
+    // '<=':['value','value'],
+    // '=':['value','value']
 }
 let strObj = {
     'stringTag': ['tainted', 'sensitive'],
